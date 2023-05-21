@@ -27,18 +27,8 @@ class Kuizi(Plugin):
             return
 
         content = e_context["context"].content
-        content += '\n请先判断这个问题是否关于日语学习、日语翻译、日语文化的内容。如果不是，就委婉的拒绝用户的回答。'
+        content += '\n请先判断这个问题是否属于日语学习或者日本文化的范畴（不用告诉用户）。如果不属于，就委婉地拒绝用户的回答。'
         logger.debug("[Kuizi] on_handle_context. content: %s" % content)
-        # # pattern = re.compile("[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]+")
-        # reply = Reply()
-        # reply.type = ReplyType.TEXT
-        # msg: ChatMessage = e_context["context"]["msg"]
-        # print(msg.content)
-        # if e_context["context"]["isgroup"]:
-        #     reply.content = msg.content + f"Hello, {msg.actual_user_nickname} from {msg.from_user_nickname}"
-        # else:
-        #     reply.content = f"Hello, {msg.from_user_nickname}"
-        # e_context["reply"] = reply
         e_context["context"].type = ContextType.TEXT
         e_context["context"].content = content
         e_context.action = EventAction.BREAK  # 事件结束，进入默认处理逻辑，一般会覆写reply
