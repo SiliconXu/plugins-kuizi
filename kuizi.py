@@ -30,21 +30,13 @@ class Kuizi(Plugin):
         ]:
             return
         
-        if e_context["context"].type == ContextType.JOIN_GROUP:
-            e_context["context"].type = ContextType.TEXT
-            msg: ChatMessage = e_context["context"]["msg"]
-            e_context.action = EventAction.CONTINUE  # 事件继续，交付给下个插件或默认逻辑
-            return
-
-        if e_context["context"].type == ContextType.PATPAT:
-            e_context["context"].type = ContextType.TEXT
-            msg: ChatMessage = e_context["context"]["msg"]
-            e_context.action = EventAction.CONTINUE  # 事件继续，交付给下个插件或默认逻辑
-            return
+        greeting = False
+        if e_context["context"].type == ContextType.JOIN_GROUP or e_context["context"].type == ContextType.PATPAT:
+            greeting = True
 
         content = e_context["context"].content
         logger.debug("[Hello] on_handle_context. content: %s" % content)
-        if e_context["context"]["isgroup"]: # 只有群聊才有这个问题范畴的限制。
+        if e_context["context"]["isgroup"] and not greeting: # 只有群聊才有这个问题范畴的限制。如果是问候信息，同样没必要限定问题范畴。
             if not content.strip().startswith('fmd'): # 如果消息是以“fmd”（free mode）开头的话（不包含唤醒词），则不要对回答的范围进行
                 content += '\n请先判断这个问题是否属于日语学习或者日本文化的范畴。如果不属于，就委婉地拒绝用户的回答。不用告诉用户问题属于什么范畴。'
                 logger.debug("[Kuizi] on_handle_context. content: %s" % content)
