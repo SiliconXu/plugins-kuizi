@@ -31,10 +31,14 @@ class Kuizi(Plugin):
             return
         
         if e_context["context"].type == ContextType.JOIN_GROUP:
+            e_context["context"].type = ContextType.TEXT
+            msg: ChatMessage = e_context["context"]["msg"]
             e_context.action = EventAction.CONTINUE  # 事件继续，交付给下个插件或默认逻辑
             return
 
         if e_context["context"].type == ContextType.PATPAT:
+            e_context["context"].type = ContextType.TEXT
+            msg: ChatMessage = e_context["context"]["msg"]
             e_context.action = EventAction.CONTINUE  # 事件继续，交付给下个插件或默认逻辑
             return
 
