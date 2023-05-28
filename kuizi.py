@@ -30,6 +30,7 @@ class Kuizi(Plugin):
         ]:
             return
         
+        print(e_context["context"].type)
         greeting = False
         if e_context["context"].type == ContextType.JOIN_GROUP or e_context["context"].type == ContextType.PATPAT:
             greeting = True
