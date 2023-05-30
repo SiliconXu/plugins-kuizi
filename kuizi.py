@@ -42,7 +42,7 @@ class Kuizi(Plugin):
                 content += '\n请先判断这个问题是否属于日语学习或者日本文化的范畴。如果不属于，就委婉地拒绝用户的回答。不用告诉用户问题属于什么范畴。'
                 logger.debug("[Kuizi] on_handle_context. content: %s" % content)
         e_context["context"].type = ContextType.TEXT
-        e_context["context"].content = content
+        e_context["context"].content = content.replace('fmd', '')
         e_context.action = EventAction.BREAK  # 事件结束，进入默认处理逻辑，一般会覆写reply
         return
 
