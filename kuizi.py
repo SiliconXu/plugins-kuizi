@@ -29,15 +29,20 @@ class Kuizi(Plugin):
             ContextType.PATPAT,
         ]:
             return
-        
-        print(e_context["context"].type)
-        greeting = False
-        if e_context["context"].type == ContextType.JOIN_GROUP or e_context["context"].type == ContextType.PATPAT:
-            greeting = True
 
         content = e_context["context"].content
         logger.debug("[Hello] on_handle_context. content: %s" % content)
-        if e_context["context"]["isgroup"] and not greeting: # 只有群聊才有这个问题范畴的限制。如果是问候信息，同样没必要限定问题范畴。
+
+        # 是否允许机器人回复非日语问题。
+        allowed = False
+        # 如果是用户加入群组，或者拍一拍，则允许回复非日语的问题。
+        if e_context["context"].type == ContextType.JOIN_GROUP or e_context["context"].type == ContextType.PATPAT:
+            allowed = True
+        # 下面这个是为了绕过 hello 插件返回的信息。如果是 hello 插件的信息，则允许回复非日语的问题。
+        elif "欢迎新用户" in content or "介绍你自己" in content:
+            allowed = True
+
+        if e_context["context"]["isgroup"] and not allowed: # 只有群聊才有这个问题范畴的限制。如果是问候信息，同样没必要限定问题范畴。
             if not content.strip().startswith('fmd'): # 如果消息是以“fmd”（free mode）开头的话（不包含唤醒词），则不要对回答的范围进行
                 content += '\n请先判断这个问题是否属于日语学习或者日本文化的范畴。如果不属于，就委婉地拒绝用户的回答。不用告诉用户问题属于什么范畴。'
                 logger.debug("[Kuizi] on_handle_context. content: %s" % content)
